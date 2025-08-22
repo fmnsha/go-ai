@@ -1,0 +1,124 @@
+{
+  "name": "project-management-board",
+  "title": "Project Management Board",
+  "fields": [
+    {
+      "id": "title",
+      "label": "Task Title",
+      "type": "text",
+      "isMulti": false,
+      "meta": {
+        "required": true,
+        "placeholder": "Enter task title"
+      },
+      "desc": "The main title of the task"
+    },
+    {
+      "id": "description", 
+      "label": "Description",
+      "type": "text",
+      "isMulti": false,
+      "meta": {
+        "required": false,
+        "multiline": true,
+        "maxLength": 500
+      },
+      "desc": "Detailed description of the task"
+    },
+    {
+      "id": "status",
+      "label": "Status",
+      "type": "select",
+      "isMulti": false,
+      "meta": {
+        "options": ["todo", "in-progress", "review", "done"],
+        "default": "todo"
+      },
+      "desc": "Current status of the task"
+    },
+    {
+      "id": "priority",
+      "label": "Priority",
+      "type": "select", 
+      "isMulti": false,
+      "meta": {
+        "options": ["low", "medium", "high", "urgent"],
+        "default": "medium"
+      },
+      "desc": "Priority level of the task"
+    },
+    {
+      "id": "assignee",
+      "label": "Assignee",
+      "type": "email",
+      "isMulti": false,
+      "meta": {
+        "required": false,
+        "placeholder": "user@example.com"
+      },
+      "desc": "Person assigned to this task"
+    },
+    {
+      "id": "tags",
+      "label": "Tags",
+      "type": "text",
+      "isMulti": true,
+      "meta": {
+        "maxItems": 10,
+        "suggestions": ["frontend", "backend", "bug", "feature", "urgent"]
+      },
+      "desc": "Tags to categorize the task"
+    },
+    {
+      "id": "due_date",
+      "label": "Due Date",
+      "type": "date",
+      "isMulti": false,
+      "meta": {
+        "required": false,
+        "format": "YYYY-MM-DD"
+      },
+      "desc": "When the task should be completed"
+    },
+    {
+      "id": "estimated_hours",
+      "label": "Estimated Hours",
+      "type": "number",
+      "isMulti": false,
+      "meta": {
+        "min": 0,
+        "max": 100,
+        "step": 0.5
+      },
+      "desc": "Estimated time to complete in hours"
+    },
+    {
+      "id": "attachments",
+      "label": "Attachments",
+      "type": "file",
+      "isMulti": true,
+      "meta": {
+        "maxFiles": 5,
+        "allowedTypes": ["image/*", "application/pdf", "text/*"]
+      },
+      "desc": "Files related to this task"
+    },
+    {
+      "id": "is_blocked",
+      "label": "Is Blocked",
+      "type": "boolean",
+      "isMulti": false,
+      "meta": {
+        "default": false
+      },
+      "desc": "Whether this task is currently blocked"
+    }
+  ],
+  "views": [
+    "kanban",
+    "table", 
+    "calendar",
+    "timeline",
+    "list"
+  ]
+}

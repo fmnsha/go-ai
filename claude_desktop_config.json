@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "go-ai": {
+      "command": "D:\\go-ai\\mcp\\main.exe",
+      "args": [],
+      "env": {
+        "DB_HOST": "localhost",
+        "DB_PORT": "27017"
+      }
+    }
+  }
+}
