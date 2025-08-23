@@ -22,6 +22,12 @@ type AddRecordArgs struct {
 	Data    map[string]json.RawMessage `json:"data"`
 }
 
+type UpdateRecordArgs struct {
+	BoardId string                     `json:"boardId"`
+	ItemId  string                     `json:"itemId"`
+	Data    map[string]json.RawMessage `json:"data"`
+}
+
 func NewBoardTools(i *do.Injector, server *mcp.Server) {
 	tools := &BoardTools{
 		boardsvcs: do.MustInvoke[board.BoardSvcs](i),
@@ -52,6 +58,20 @@ func NewBoardTools(i *do.Injector, server *mcp.Server) {
 
 	if err := server.RegisterTool("add-record", "add data to board", func(ctx context.Context, args AddRecordArgs) (*mcp.ToolResponse, error) {
 		result, err := tools.boardsvcs.AddRecord(ctx, args.BoardId, args.Data)
+		if err != nil {
+			return nil, err
+		}
+
+		j, _ := json.Marshal(result)
+
+		return mcp.NewToolResponse(mcp.NewTextContent(string(j))), nil
+	}); err != nil {
+		log.Fatal(err)
+	}
+
+	if err := server.RegisterTool("update-record", "update record in specific board", func(ctx context.Context, args UpdateRecordArgs) (*mcp.ToolResponse, error) {
+
+		result, err := tools.boardsvcs.UpdateRecord(ctx, args.BoardId, args.ItemId, args.Data)
 		if err != nil {
 			return nil, err
 		}

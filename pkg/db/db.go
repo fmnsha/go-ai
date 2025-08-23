@@ -12,6 +12,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
+var DbClient *mongo.Client
+
 func InitDB() (*mongo.Client, error) {
 	dbFullHost := util.GetEnv("DB_FULL_HOST", "")
 	dbPass := util.GetEnv("DB_PASSWORD", "")
@@ -56,6 +58,8 @@ func InitDB() (*mongo.Client, error) {
 	if err := client.Ping(ctx, readpref.Primary()); err != nil {
 		return nil, err
 	}
+
+	DbClient = client
 
 	return client, nil
 

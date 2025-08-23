@@ -7,7 +7,7 @@ import (
 )
 
 type Data struct {
-	Id        primitive.ObjectID `bson:"_id" json:"_id"`
+	Id        primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
 	BoardId   primitive.ObjectID `bson:"boardId" json:"boardId"`
 	Data      map[string]any     `bson:"data" json:"data"`
 	CreatedAt time.Time          `bson:"createdAt" json:"createdAt"`

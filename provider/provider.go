@@ -15,7 +15,6 @@ func Provide(i *do.Injector) {
 	do.Provide(i, boardrepo.NewBoardRepo)
 	//data
 	do.Provide(i, board.NewDataSvcs)
-	do.Provide(i, boardrepo.NewDataRepo)
 	//workspace
 	do.Provide(i, workspace.NewWorkspaceSvcs)
 	do.Provide(i, workspacerepo.NewWorkspaceRepo)
