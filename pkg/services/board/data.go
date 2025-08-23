@@ -39,13 +39,13 @@ func NewDataSvcs(i *do.Injector) (DataSvcsConstructor, error) {
 }
 
 func (d *datasvcs) GetById(ctx context.Context, id primitive.ObjectID) (*models.Data, error) {
-	return d.repo.GetByFilter(ctx, bson.M{"_id": id})
+	return d.repo.GetByFilter(ctx, bson.M{"_id": id, "trash": false})
 
 }
 
 func (d *datasvcs) GetAll(ctx context.Context, id primitive.ObjectID) ([]models.Data, error) {
 
-	filter := bson.M{}
+	filter := bson.M{"trash": false}
 
 	pipeline := []bson.M{
 		{"$match": filter},

@@ -11,6 +11,7 @@ type Board struct {
 	BoardDto  `bson:",inline"`
 	CreatedAt time.Time `bson:"created_at" json:"created_at"`
 	UpdatedAt time.Time `bson:"updated_at" json:"updated_at"`
+	Trash     bool      `bson:"trash" json:"trash"`
 }
 
 type BoardDto struct {

@@ -12,6 +12,7 @@ type Data struct {
 	Data      map[string]any     `bson:"data" json:"data"`
 	CreatedAt time.Time          `bson:"createdAt" json:"createdAt"`
 	UpdatedAt time.Time          `bson:"updatedAt" json:"updatedAt"`
+	Trash     bool               `bson:"trash" json:"trash"`
 }
 
 type FileData struct {

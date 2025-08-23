@@ -15,6 +15,8 @@ func Provide(i *do.Injector) {
 	do.Provide(i, boardrepo.NewBoardRepo)
 	//data
 	do.Provide(i, board.NewDataSvcs)
+	//group
+	do.Provide(i, board.NewGroupSvcs)
 	//workspace
 	do.Provide(i, workspace.NewWorkspaceSvcs)
 	do.Provide(i, workspacerepo.NewWorkspaceRepo)

@@ -40,7 +40,7 @@ func (b *boardsvcs) GetBoard(ctx context.Context, boardId string) (*models.Board
 	if err != nil {
 		return nil, err
 	}
-	board, err := b.repo.GetByFilter(ctx, bson.M{"_id": _id})
+	board, err := b.repo.GetByFilter(ctx, bson.M{"_id": _id, "trash": false})
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func (b *boardsvcs) GetBoard(ctx context.Context, boardId string) (*models.Board
 }
 
 func (b *boardsvcs) GetAll(ctx context.Context) ([]models.Board, error) {
-	match := bson.M{"$match": bson.M{}}
+	match := bson.M{"$match": bson.M{"trash": false}}
 	pipeline := []bson.M{
 		match,
 	}
