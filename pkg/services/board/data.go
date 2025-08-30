@@ -18,6 +18,7 @@ type DataSvcs interface {
 	AddData(ctx context.Context, data *models.Data) error
 	GetAll(ctx context.Context, id primitive.ObjectID) ([]models.Data, error)
 	Update(ctx context.Context, data *models.Data) (*models.Data, error)
+	DeleteAllByBoardId(ctx context.Context, id primitive.ObjectID) error
 	//Update(ctx context.Context, data *models.Data) (*models.Data, error)
 }
 
@@ -81,4 +82,8 @@ func (d *datasvcs) Update(ctx context.Context, data *models.Data) (*models.Data,
 	}
 
 	return updatedData, nil
+}
+
+func (d *datasvcs) DeleteAllByBoardId(ctx context.Context, id primitive.ObjectID) error {
+	return d.repo.DeleteMain(ctx, bson.M{"boardId": id})
 }

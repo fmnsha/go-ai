@@ -17,6 +17,8 @@ import (
 type BoardSvcs interface {
 	GetAll(ctx context.Context) ([]models.Board, error)
 	AddBoard(ctx context.Context, data *models.BoardDto) (*models.Board, error)
+	DeleteBoard(ctx context.Context, boardId string) (*models.Board, error)
+	//
 	AddRecord(ctx context.Context, boardId string, data map[string]json.RawMessage) (*models.Data, error)
 	UpdateRecord(ctx context.Context, boardId, itemId string, data map[string]json.RawMessage) (*models.Data, error)
 	GetAllRecords(ctx context.Context, boardId string) ([]models.Data, error)
@@ -47,6 +49,7 @@ func (b *boardsvcs) GetBoard(ctx context.Context, boardId string) (*models.Board
 	return board, nil
 }
 
+// boards
 func (b *boardsvcs) GetAll(ctx context.Context) ([]models.Board, error) {
 	match := bson.M{"$match": bson.M{"trash": false}}
 	pipeline := []bson.M{
@@ -72,6 +75,23 @@ func (b *boardsvcs) AddBoard(ctx context.Context, data *models.BoardDto) (*model
 	}
 
 	if err := b.repo.Add(ctx, board); err != nil {
+		return nil, err
+	}
+
+	return board, nil
+}
+
+func (b *boardsvcs) DeleteBoard(ctx context.Context, boardId string) (*models.Board, error) {
+	board, err := b.GetBoard(ctx, boardId)
+	if err != nil {
+		return nil, errors.New("board not found")
+	}
+
+	if err := b.repo.DeleteMain(ctx, bson.M{"_id": board.Id}); err != nil {
+		return nil, err
+	}
+
+	if err := b.datasvcsConstr(board.Name).DeleteAllByBoardId(ctx, board.Id); err != nil {
 		return nil, err
 	}
 

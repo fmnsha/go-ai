@@ -22,6 +22,7 @@ func NewBoardHandler(i *do.Injector, r *chi.Mux) {
 
 	r.Route("/boards", func(r chi.Router) {
 		r.Post("/", helpers.Make(h.AddBoard))
+		r.Delete("/{boardId}", helpers.Make(h.DeleteBoard))
 		r.Post("/{boardId}/items", helpers.Make(h.AddRecord))
 		r.Put("/{boardId}/items/{itemId}", helpers.Make(h.UpdateItem))
 		r.Get("/{boardId}/items", helpers.Make(h.GetAllRecords))
@@ -37,6 +38,19 @@ func (h *BoardHandler) AddBoard(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	board, err := h.boardsvcs.AddBoard(r.Context(), &data)
+	if err != nil {
+		return err
+	}
+
+	return helpers.WriteJson(w, http.StatusOK, board)
+
+}
+
+func (h *BoardHandler) DeleteBoard(w http.ResponseWriter, r *http.Request) error {
+
+	boardId := chi.URLParam(r, "boardId")
+
+	board, err := h.boardsvcs.DeleteBoard(r.Context(), boardId)
 	if err != nil {
 		return err
 	}

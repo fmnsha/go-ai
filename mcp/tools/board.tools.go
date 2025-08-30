@@ -28,11 +28,16 @@ type UpdateRecordArgs struct {
 	Data    map[string]json.RawMessage `json:"data"`
 }
 
+type GetAllBoardItemsArgs struct {
+	BoardId string `json:"boardId"`
+}
+
 func NewBoardTools(i *do.Injector, server *mcp.Server) {
 	tools := &BoardTools{
 		boardsvcs: do.MustInvoke[board.BoardSvcs](i),
 	}
 
+	// add new board
 	if err := server.RegisterTool("add-board", "add new board", func(ctx context.Context, args models.BoardDto) (*mcp.ToolResponse, error) {
 		board, err := tools.boardsvcs.AddBoard(ctx, &args)
 		if err != nil {
@@ -43,6 +48,7 @@ func NewBoardTools(i *do.Injector, server *mcp.Server) {
 		log.Fatal(err)
 	}
 
+	// get all boards
 	if err := server.RegisterTool("get-all-boards", "get all boards", func(ctx context.Context, args Empty) (*mcp.ToolResponse, error) {
 		boards, err := tools.boardsvcs.GetAll(ctx)
 		if err != nil {
@@ -56,6 +62,7 @@ func NewBoardTools(i *do.Injector, server *mcp.Server) {
 		log.Fatal(err)
 	}
 
+	// add record to board
 	if err := server.RegisterTool("add-record", "add data to board", func(ctx context.Context, args AddRecordArgs) (*mcp.ToolResponse, error) {
 		result, err := tools.boardsvcs.AddRecord(ctx, args.BoardId, args.Data)
 		if err != nil {
@@ -69,9 +76,25 @@ func NewBoardTools(i *do.Injector, server *mcp.Server) {
 		log.Fatal(err)
 	}
 
+	// update record in specific board
 	if err := server.RegisterTool("update-record", "update record in specific board", func(ctx context.Context, args UpdateRecordArgs) (*mcp.ToolResponse, error) {
 
 		result, err := tools.boardsvcs.UpdateRecord(ctx, args.BoardId, args.ItemId, args.Data)
+		if err != nil {
+			return nil, err
+		}
+
+		j, _ := json.Marshal(result)
+
+		return mcp.NewToolResponse(mcp.NewTextContent(string(j))), nil
+	}); err != nil {
+		log.Fatal(err)
+	}
+
+	// get all items in specific board
+	if err := server.RegisterTool("get-all-board-items", "get all items in specific board", func(ctx context.Context, args GetAllBoardItemsArgs) (*mcp.ToolResponse, error) {
+
+		result, err := tools.boardsvcs.GetAllRecords(ctx, args.BoardId)
 		if err != nil {
 			return nil, err
 		}
